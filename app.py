@@ -40,6 +40,8 @@ def test():
     else:
         KUBE_HOST='https://kubernetes.default.svc/api/v1/namespaces/default/pods'
 
+    KUBE_HOST='https://jsonplaceholder.typicode.com/todos/1'
+
     SA_TOKEN = "token" in json_data and json_data["token"] or SA_TOKEN_FROM_PATH
 
     print("KUBE_HOST=" + str(KUBE_HOST))
@@ -48,12 +50,11 @@ def test():
     test_results = requests.get(KUBE_HOST, headers={'Authorization': 'Bearer ' + str(SA_TOKEN)},
                                         verify=False)
 
-#    print("R " + str(test_results));
+    print("R " + str(test_results.json()));
 
 
-    if test_results["data"]:
-        return (test_results)
-#        return (test_results.text, test_results.status_code, test_results.headers.items())
+    if test_results.content:
+        return (test_results.content, test_results.status_code, test_results.headers.items())
     else:
         return abort(make_response(test_results, 400))
 
