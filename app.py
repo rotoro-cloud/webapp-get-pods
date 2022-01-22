@@ -40,7 +40,7 @@ def test():
     else:
         KUBE_HOST='https://kubernetes.default.svc/api/v1/namespaces/default/pods'
 
-    KUBE_HOST='https://jsonplaceholder.typicode.com/todos/1'
+#    KUBE_HOST='https://jsonplaceholder.typicode.com/todos/1'
 
     SA_TOKEN = "token" in json_data and json_data["token"] or SA_TOKEN_FROM_PATH
 
