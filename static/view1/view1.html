@@ -3,25 +3,50 @@
     <div class="card-panel hoverable center-align main-card-panel" style="padding-top: 0px;">
 
         <h4> Kubernetes Get Pods </h4>
-
             <form class="col s12" id="textarea_language">
+
               <div class="row">
-                
-                <div class="input-field col s12">
-                  <textarea placeholder="Enter Token" id="token" ng-model="token" class="validate">
-                  <label for="token">Token</label>
+                <div class="input-field col">
+                  <input placeholder="" ng-model="host" id="first_name" type="text" class="validate">
+                  <label for="host">Host Name</label>
                 </div>
               </div>
-
-              <button style="margin-right: 20px;" class="waves-effect waves-light btn" ng-class="{'disabled': is_loading}" ng-click="test()"> Get Pods
-                <i class="fa fa-refresh fa-spin fa-3x fa-fw" ng-show="is_loading"></i>
-              </button>
+              <div class="row">
+                <div class="input-field col s12">
+                  <textarea placeholder="" id="token" ng-model="token" class="validate"></textarea>
+                  <label for="token">Enter Token</label>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col">
+                  <button style="margin-right: 20px;" class="waves-effect waves-light btn" ng-class="{'disabled': is_loading}" ng-click="test()"> Get Pods
+                    <i class="fa fa-refresh fa-spin fa-3x fa-fw" ng-show="is_loading"></i>
+                  </button>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-2">
+                  <div ng-if="alert_type==='success'">
+                    <img style="max-width:100%;max-height:100%;" src="img/ok.png"/>
+                  </div>
+                  <div ng-if="alert_type==='failure'">
+                    <img style="max-width:100%;max-height:100%;" src="img/fail.png"/>
+                  </div>
+                </div>
+                <div class="col">
+                  <ul class="fa-ul" >
+                    <li style="text-align: left" ng-if="alert_message">
+                        <i class="fa-li fa fa-close" ng-if="alert_type==='failure'"></i>
+                        <i class="fa-li fa fa-check" ng-if="alert_type==='success'"></i>
+                        {{ alert_message }}
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </form>
               <div class="row">
                 <div class="col s2 m2 l2">
-
-              <div class="row">
-                <div class="col s2 m2 l2">
-                <table>
+                  <table>
                     <thead>
                       <tr >
                           <th>POD Name</th>
@@ -44,26 +69,6 @@
                   </table>
                 </div>
               </div>
-
-                  <ul class="fa-ul" >
-                    <li style="text-align: left" ng-if="alert_message">
-                        <i class="fa-li fa fa-close" ng-if="alert_type==='failure'"></i>
-                        <i class="fa-li fa fa-check" ng-if="alert_type==='success'"></i>
-                        {{ alert_message }}
-                    </li>
-                  </ul>
-                </div>
-                <div class="col s10 m10 l10" style="text-align:left; padding-top: 20px;">
-                  <div ng-if="alert_type==='success'">
-                    <img style="max-width:30%;max-height:30%;" src="img/ok.png"/>
-                  </div>
-                  <div ng-if="alert_type==='failure'">
-                    <img style="max-width:30%;max-height:30%;" src="img/fail.png"/>
-                  </div>
-                </div>
-              </div>
-            </form>
-
     </div>
 
 </div>

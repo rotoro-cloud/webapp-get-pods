@@ -1,6 +1,6 @@
 from flask import Flask, jsonify, request, abort, make_response
 from flask import render_template
-import socket
+import requests
 import os
 
 TEMPLATES_FOLDER = 'templates'
@@ -8,6 +8,12 @@ STATICS_FOLDER = 'static'
 app = Flask(__name__, static_url_path='', static_folder=STATICS_FOLDER, template_folder=TEMPLATES_FOLDER)
 
 BACKGROUND_IMAGE = "bg.jpg"
+
+
+SA_TOKEN = None
+SA_TOKEN_FROM_PATH = None
+SA_TOKEN_PATH = '/var/run/secrets/kubernetes.io/serviceaccount/token'
+
 
 color_codes = {
     "red": "#e74c3c",
@@ -18,35 +24,38 @@ color_codes = {
     "darkblue": "#130f40"
 }
 
-APP_NAME = "APP_NAME" in os.environ and os.environ.get('APP_NAME') or "Connectivity Test App"
+APP_NAME = "APP_NAME" in os.environ and os.environ.get('APP_NAME') or "Get PODs"
 BG_COLOR = "BG_COLOR" in os.environ and os.environ.get('BG_COLOR') or "blue"
 
 
-def socket_test(host, port):
-
-    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    s.settimeout(2)
-
-    # connect to remote host
-    try:
-        s.connect((host, port))
-    except Exception as ex:
-        print('Unable to connect ' + str(ex))
-        return {"status": False, "message": str(ex)}
-
-    return {"status": True, "message": "Success!"}
+#    return {"status": True, "message": "Success!"}
 
 
 @app.route('/test', methods=['POST'])
 def test():
     json_data = request.get_json(silent=True)
 
-    test_results = socket_test(json_data["host"], json_data["port"])
-
-    if test_results["status"]:
-        return jsonify(test_results)
+    if json_data["host"]:
+        KUBE_HOST=json_data["host"]
     else:
-        return abort(make_response(jsonify(test_results), 400))
+        KUBE_HOST='https://kubernetes.default.svc/api/v1/namespaces/default/pods'
+
+    SA_TOKEN = "token" in json_data and json_data["token"] or SA_TOKEN_FROM_PATH
+
+    print("KUBE_HOST=" + str(KUBE_HOST))
+    print("SA_TOKEN=" + str(SA_TOKEN))
+
+    test_results = requests.get(KUBE_HOST, headers={'Authorization': 'Bearer ' + str(SA_TOKEN)},
+                                        verify=False)
+
+#    print("R " + str(test_results));
+
+
+    if test_results["data"]:
+        return jsonify(test_results)
+#        return (test_results.text, test_results.status_code, test_results.headers.items())
+    else:
+        return abort(make_response(test_results, 400))
 
 
 @app.route('/')

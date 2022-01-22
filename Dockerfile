@@ -6,7 +6,7 @@ ADD ./requirements.txt /opt/webapp-get-pods/
 
 WORKDIR /opt/webapp-get-pods
 
-RUN pip install -r requirements.txt
+RUN pip3 install -r requirements.txt
 
 ADD . /opt/webapp-get-pods
 

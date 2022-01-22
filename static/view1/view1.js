@@ -21,18 +21,18 @@ angular.module('myApp.view1', ['ngRoute'])
 
      $scope.host = "";
      $scope.port = "";
-	 $scope.token = "";
+     $scope.token = "";
 
      $scope.all_question_statuses = [];
 
      $scope.test = function(){
-		$scope.pods_data = null;
+        $scope.pods_data = null;
         $scope.is_loading = true;
         $http.post("/test", {host: $scope.host, port: $scope.port}).then(function(response){
             $scope.is_loading = false;
             $scope.alert_message = response.data.message;
             $scope.alert_type = "success";
-			$scope.pods_data = response.data;
+            $scope.pods_data = response.data;
         }, function(response){
             $scope.is_loading = false;
             $scope.alert_message = response.data.message || response.data;
@@ -41,5 +41,5 @@ angular.module('myApp.view1', ['ngRoute'])
         })
 
      }
-     $scope.test();
+//     $scope.test();
 }]);
