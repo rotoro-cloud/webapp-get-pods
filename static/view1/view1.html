@@ -40,6 +40,11 @@
                         <i class="fa-li fa fa-check" ng-if="alert_type==='success'"></i>
                         {{ alert_message }}
                     </li>
+
+
+                    <li style="text-align: left" ng-if="!alert_message">
+                        {{ pods_data }}
+                    </li>
                   </ul>
                 </div>
               </div>
