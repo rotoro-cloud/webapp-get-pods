@@ -52,7 +52,7 @@ def test():
 
 
     if test_results["data"]:
-        return jsonify(test_results)
+        return (test_results)
 #        return (test_results.text, test_results.status_code, test_results.headers.items())
     else:
         return abort(make_response(test_results, 400))
