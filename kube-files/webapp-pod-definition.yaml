@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: webapp-get-pods
+  labels:
+    name: webapp-get-pods
+spec:
+  containers:
+  - name: webapp-get-pods
+    image: quay.io/rotorocloud/webapp-get-pods
+    ports:
+    - containerPort: 8080
