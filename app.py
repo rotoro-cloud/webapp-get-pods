@@ -47,6 +47,9 @@ def test():
     print("KUBE_HOST=" + str(KUBE_HOST))
     print("SA_TOKEN=" + str(SA_TOKEN))
 
+    print("SSS=" + str(json_data))
+
+
     test_results = requests.get(KUBE_HOST, headers={'Authorization': 'Bearer ' + str(SA_TOKEN)},
                                         verify=False)
 

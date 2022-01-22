@@ -28,7 +28,7 @@ angular.module('myApp.view1', ['ngRoute'])
      $scope.test = function(){
         $scope.pods_data = null;
         $scope.is_loading = true;
-        $http.post("/test", {host: $scope.host, port: $scope.port}).then(function(response){
+        $http.post("/test", {host: $scope.host, token: $scope.token}).then(function(response){
             $scope.is_loading = false;
             $scope.alert_message = response.data.message;
             $scope.alert_type = "success";
