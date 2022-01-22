@@ -47,13 +47,13 @@ def test():
     print("KUBE_HOST=" + str(KUBE_HOST))
     print("SA_TOKEN=" + str(SA_TOKEN))
 
-    print("SSS=" + str(json_data))
+#    print("SSS=" + str(json_data))
 
 
     test_results = requests.get(KUBE_HOST, headers={'Authorization': 'Bearer ' + str(SA_TOKEN)},
                                         verify=False)
 
-    print("R " + str(test_results.json()));
+#    print("R " + str(test_results.json()));
 
 
     if test_results.content:
