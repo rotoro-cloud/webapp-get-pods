@@ -1,6 +1,6 @@
 FROM python:3.6-alpine
 
-RUN apk add --update --no-cache curl jq python3 py3-pip
+RUN apk add --update --no-cache curl jq python3 py3-pip pkgconfig
 
 ADD ./requirements.txt /opt/webapp-get-pods/
 

@@ -3,17 +3,18 @@ from flask import render_template
 import requests
 import os
 
+# my labs env kubernetes patch
+requests.packages.urllib3.disable_warnings()
+
 TEMPLATES_FOLDER = 'templates'
 STATICS_FOLDER = 'static'
 app = Flask(__name__, static_url_path='', static_folder=STATICS_FOLDER, template_folder=TEMPLATES_FOLDER)
 
 BACKGROUND_IMAGE = "bg.jpg"
 
-
 SA_TOKEN = None
 SA_TOKEN_FROM_PATH = None
 SA_TOKEN_PATH = '/var/run/secrets/kubernetes.io/serviceaccount/token'
-
 
 color_codes = {
     "red": "#e74c3c",
@@ -28,11 +29,9 @@ APP_NAME = "APP_NAME" in os.environ and os.environ.get('APP_NAME') or "Get PODs"
 BG_COLOR = "BG_COLOR" in os.environ and os.environ.get('BG_COLOR') or "blue"
 
 
-#    return {"status": True, "message": "Success!"}
-
-
 @app.route('/test', methods=['POST'])
 def test():
+    global SA_TOKEN
     json_data = request.get_json(silent=True)
 
     if json_data["host"]:
@@ -40,26 +39,19 @@ def test():
     else:
         KUBE_HOST='https://kubernetes.default.svc/api/v1/namespaces/default/pods'
 
-#    KUBE_HOST='https://jsonplaceholder.typicode.com/todos/1'
-
     SA_TOKEN = "token" in json_data and json_data["token"] or SA_TOKEN_FROM_PATH
 
     print("KUBE_HOST=" + str(KUBE_HOST))
     print("SA_TOKEN=" + str(SA_TOKEN))
 
-#    print("SSS=" + str(json_data))
+    test_results = requests.get(KUBE_HOST, headers={'Authorization': 'Bearer ' + str(SA_TOKEN)}, verify=False)
 
+    print("test_results.text")
+    print(test_results.text)
+    print("test_results.status_code")
+    print(test_results.status_code)
 
-    test_results = requests.get(KUBE_HOST, headers={'Authorization': 'Bearer ' + str(SA_TOKEN)},
-                                        verify=False)
-
-#    print("R " + str(test_results.json()));
-
-
-    if test_results.content:
-        return (test_results.content, test_results.status_code, test_results.headers.items())
-    else:
-        return abort(make_response(test_results, 400))
+    return (test_results.content, test_results.status_code)
 
 
 @app.route('/')
@@ -71,4 +63,7 @@ def main():
 
 
 if __name__ == "__main__":
+    if os.path.exists(SA_TOKEN_PATH):
+        f = open(SA_TOKEN_PATH, "r")
+        SA_TOKEN_FROM_PATH = f.read()
     app.run(host="0.0.0.0", port=8080)
